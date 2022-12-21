@@ -1,0 +1,5 @@
+# CUSTOM
+*.log
+.vscode
+*.xml
+exports.sh
