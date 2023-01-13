@@ -18,7 +18,7 @@ BHNL_Api=https://webservices.bhosted.nl
 ##########################
 ###################
 #######
-. exports.sh # Contains "secrets", not published to GH:
+. exports.sh # Contains "secrets", file is not published to GH:
 # export BHNL_Account=aaaa
 # export BHNL_Password=ppppppppp
 # export BHNL_sld=sssssss
@@ -49,6 +49,7 @@ _err(){
 ######
 ####################
 ##########################
+# THERE IS MORE TEST CODE AT THE BOTTOM!!!!!!
 ##########################TEMPORARY FUNCTIONS, REMOVE DURING FINAL TESTING - END
 
 ######## Public Functions ###############################
@@ -94,7 +95,7 @@ dns_bhnl_add() {
     _debug _domain "$_domain"
 
     # We have the correct info, now add the TXT record
-    _debug "Adding TXT record for $_sub_domain in $_domain with value 'txtvalue'"
+    _debug "Adding TXT record for $_sub_domain in $_domain with value '$txtvalue'"
     command="dns"
     subcommand="addrecord"
     type=TXT
@@ -114,7 +115,6 @@ dns_bhnl_add() {
         fi
         if [ "$ENTITY" == "id" ] ; then
             foundid="$CONTENT"
-            break
         fi
         if [ "$founderror" != "999" ] &&  [ "$foundid" != "notfound" ] ; then
             break
@@ -126,7 +126,6 @@ dns_bhnl_add() {
     fi
     
     _info "TXT record succesfully added; recordid is $foundid"
-
 }
 
 # Usage: dns_bhnl_rm _acme-challenge.domain.com "oiusefhjkdsfiupwqi123kjlsaiduaasd"
@@ -157,8 +156,7 @@ dns_bhnl_rm() {
 
     _debug "Detect root zone/split subdomain"
     if ! _get_root "$fulldomain" ; then
-        _err "invalid domain, or incorrect bhosted 
-        login info"
+        _err "invalid domain, or incorrect bhosted login info"
         return 1
     fi
     _debug _sub_domain "$_sub_domain"
@@ -309,30 +307,10 @@ scan_xml() {
     read -d \< ENTITY CONTENT
 }
 
-
-
+###### TEST CODE 
 dns_bhnl_add "subd.rengunet.nl" "this is an acme test"
-
-local returnvalue=$?
-if [ "$returnvalue" != "1" ] then ;
+ret=$?
+if [ "$ret" != "1" ] ; then
     dns_bhnl_rm "subd.rengunet.nl" "this is an acme test"
 fi
 return
-
-
-
-
-command="dns"
-subcommand="getrecords"
-type=TXT
-name=Test
-content=Value
-ttl=3600
-
-curl $BHNL_Api/$command/$subcommand?user=$BHNL_Account\&password=$BHNL_Password\&tld=$BHNL_tld\&sld=$BHNL_sld\&type=$type\&name=$name\&content=$content\&ttl=$ttl > tmp.xml
-
-
-while scan_xml; do
-    echo "$ENTITY => $CONTENT"
-done < tmp.xml
-
