@@ -307,7 +307,11 @@ scan_xml() {
     read -d \< ENTITY CONTENT
 }
 
-###### TEST CODE 
+###### TEST CODE
+#####
+####
+###
+##
 dns_bhnl_add "subd.rengunet.nl" "this is an acme test"
 ret=$?
 if [ "$ret" != "1" ] ; then
