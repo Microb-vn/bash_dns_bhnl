@@ -1,11 +1,10 @@
-# (My) SynoWildcardCert
+# Bhosted DNS script to be used by acme.sh
 
-Create custom (and possible) wildcard certificate for Synology NAS - and possibly other linux based devices - using acme.sh using DNS-01 challenge method.
+My challenge was to create custom (and ideally ) wildcard certificates for Synology NAS using acme.sh and its DNS-01 challenge method. Synology only supports the creating certificates using the HTTP(s) challenge method.
 
-For me, to use acme.sh for my synology, this ONLY required a special script to update DNS to create temporary acme-challenge TXT records following the methods as prescribed by acme.sh. As I am with the Internet Hosting company called bhosted (bhosted.nl), I developed a script that can accept and execute the DNS challenge API calls that are required for acme.sh.
+For me, to use acme.sh for my synology, this ONLY required a special script to update DNS to create temporary acme-challenge TXT records following the methods as prescribed by acme.sh. As I am with the Internet Hosting company called bhosted (bhosted.nl) - which also hosts my DNS - , and there was no dsn script available for this provider, I developed a script that execute the DNS challenge API calls that are required for acme.sh.
 
-**This repo only contains the DNS script that should be used as part of acme.sh.**
-
+**Please note that this repo only contains the DNS script that should be used as part of acme.sh.**
 
  For generic information using acme.sh - the main script to request and manage (letsencrypt) certificates, see github https://github.com/acmesh-official/acme.sh 
 
@@ -51,4 +50,5 @@ export SYNO_DID="myMFA-did"
 ./acme.sh -d "mydomain.com" --deploy --deploy-hook synology_dsm --home $PWD
 ```
 
-And that worked! I assigned the wildcart certificate the "default" attribute in DSM and allocated the certificate to all my websites.
+And that worked! I assigned the wildcart certificate the "default" attribute in DSM and allocated the certificate to all my websites. I also scheduled a "renew" action using the Synology DSM Task Scheduler (see https://lippertmarkus.com/2020/03/14/synology-le-dns-auto-renew/
+)
