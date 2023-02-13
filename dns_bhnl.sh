@@ -14,15 +14,19 @@
 
 BHNL_Api=https://webservices.bhosted.nl
 
-##########################TEMPORARY FUNCTIONS, REMOVE DURING FINAL TESTING - BEGIN
-##########################
-###################
-#######
-. exports.sh # Contains "secrets", file is not published to GH:
+# BEGIN #########################TEMPORARY FUNCTIONS, USED FOR TESTING STANDALONE SCRIPT
+# BEGIN ######################### REMOVE WHEN USING WITH ACME.SH!!
+# BEGIN ##################
+# BEGIN ######
+
+. exports.sh # Contains my "secrets", file is not published to GH, but contains
+             # exports as shown below:
 # export BHNL_Account=aaaa
 # export BHNL_Password=ppppppppp
 # export BHNL_sld=sssssss
 # export BHNL_tld=tt
+
+# export TEST_domain=www.mydomain.nl
 
 _saveaccountconf_mutable(){
     _debug "saveaccountconf_mutable - saved - $1 $2"
@@ -46,11 +50,11 @@ _err(){
     _txt=$@
     echo "ERROR:$_txt"
 }
-######
-####################
-##########################
-# THERE IS MORE TEST CODE AT THE BOTTOM!!!!!!
-##########################TEMPORARY FUNCTIONS, REMOVE DURING FINAL TESTING - END
+# END #####
+# END ###################
+# END #########################
+# END ## THERE IS MORE TEST CODE AT THE BOTTOM!!!!!!
+# END #########################TEMPORARY FUNCTIONS, REMOVE WHEN USING WITH ACME.SH!!
 
 ######## Public Functions ###############################
 
@@ -307,14 +311,16 @@ scan_xml() {
     read -d \< ENTITY CONTENT
 }
 
-###### TEST CODE
-#####
-####
-###
-##
-dns_bhnl_add "subd.rengunet.nl" "this is an acme test"
+# BEGIN ##### TEST CODE - REMOVE WHEN USING WITH ACME.SH!!
+# BEGIN ####
+# BEGIN ###
+# BEGIN ##
+# BEGIN # The export TEST_domain should contain your test site 
+# BEGIN # name, e.g. www.mydomain.nl
+dns_bhnl_add "$TEST_domain" "this is an acme test"
 ret=$?
 if [ "$ret" != "1" ] ; then
-    dns_bhnl_rm "subd.rengunet.nl" "this is an acme test"
+    dns_bhnl_rm "$TEST_domain" "this is an acme test"
 fi
 return
+# END ######

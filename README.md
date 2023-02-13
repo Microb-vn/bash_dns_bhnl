@@ -1,8 +1,14 @@
 # Bhosted DNS script to be used by acme.sh
 
-My challenge was to create custom (and ideally ) wildcard certificates for Synology NAS using acme.sh and its DNS-01 challenge method. Synology only supports the creating certificates using the HTTP(s) challenge method.
+As Synology NAS user, I host a few websites from my NAS. They are mainly to support a personal BLOG, a small website with food recipes, a Calendar, Webmail and File Sharing website - stuff like that. All for personal use.
+My challenge was to create a custom (and ideally) wildcard certificate for my websites using acme.sh and its DNS-01 challenge method. Synology by default only supports the creation of certificates using the HTTP challenge method, and that method does note support the creation/maintenance of wildcard certificates. I want to use a wildcard certificate
 
-For me, to use acme.sh for my synology, this ONLY required a special script to update DNS to create temporary acme-challenge TXT records following the methods as prescribed by acme.sh. As I am with the Internet Hosting company called bhosted (bhosted.nl) - which also hosts my DNS - , and there was no dsn script available for this provider, I developed a script that execute the DNS challenge API calls that are required for acme.sh.
+- to have one certificate for all my websites (some have different subdomain prefixes)
+- properly secure the websites by using encrypted internet traffic.
+
+For me, to use acme.sh for my synology, this ONLY required a special script to update DNS to create temporary acme-challenge TXT records following the methods as prescribed by acme.sh. As I am with the Internet Hosting company called bhosted (bhosted.nl) - where I have registered my domain and which hosts my DNS - , and there was no dsn script available for this provider, I developed a script that execute the DNS challenge API calls that are required for acme.sh.
+
+Although I use the acme.sh and dns script for my Synology NAS, it is written in bash and as such it should work with most - if not all - Linux implementations.
 
 **Please note that this repo only contains the DNS script that should be used as part of acme.sh.**
 
@@ -35,7 +41,7 @@ export BHNL_tld=com
 ./acme.sh --issue -d "mydomain.com" -d "*.mydomain.com" --dns dns_bhnl --home $PWD --server letsencrypt
 ```
 
-followed by a deployment on my synology NAS:
+followed by a deployment on my Synology NAS:
 
 ```bash
 # set deployment options, see https://github.com/acmesh-official/acme.sh/wiki/deployhooks#20-deploy-the-cert-into-synology-dsm
@@ -44,11 +50,10 @@ export SYNO_Hostname="mysynology.local"  # Specify if not using on localhost
 export SYNO_Port="myport"  # Port of DSM WebUI, defaults to 5000 for HTTP and 5001 for HTTPS
 export SYNO_Username="mydamin"
 export SYNO_Password="myadminpassword"
-export SYNO_Certificate="my certificate (wildcart created with acme.sh)"  # description text shown in Control Panel ➡ Security ➡ Certificate
+export SYNO_Certificate="my certificate (wildcard created with acme.sh)"  # description text shown in Control Panel ➡ Security ➡ Certificate
 export SYNO_Create=1  # create certificate if it doesn't exist
 export SYNO_DID="myMFA-did"
 ./acme.sh -d "mydomain.com" --deploy --deploy-hook synology_dsm --home $PWD
 ```
 
-And that worked! I assigned the wildcart certificate the "default" attribute in DSM and allocated the certificate to all my websites. I also scheduled a "renew" action using the Synology DSM Task Scheduler (see https://lippertmarkus.com/2020/03/14/synology-le-dns-auto-renew/
-)
+And that worked! I assigned the wildcard certificate the "default" attribute in DSM and allocated the certificate to all my websites. I also scheduled a "renew" action using the Synology DSM Task Scheduler to renew the certificate once a month (see https://lippertmarkus.com/2020/03/14/synology-le-dns-auto-renew/).
