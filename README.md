@@ -38,8 +38,10 @@ export BHNL_Account=mycaccount
 export BHNL_Password=MYHASHEDPASSWORD
 export BHNL_sld=mydomain
 export BHNL_tld=com
-./acme.sh --issue -d "mydomain.com" -d "*.mydomain.com" --dns dns_bhnl --home $PWD --server letsencrypt
+./acme.sh --issue -d "mydomain.com" -d "*.mydomain.com" --dns dns_bhnl --home $PWD --server letsencrypt --keylength 2048
 ```
+
+> Note: use keylength of at least 2048 (see ACME.SH documentation) to  ensure you get an RSA certificate. Synology APPS prefer that above ECC certificates
 
 followed by a deployment on my Synology NAS:
 
