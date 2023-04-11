@@ -12,8 +12,6 @@
 # bhosted requires IP address where the calls are made from
 # are registered in their web control panel
 
-BHNL_Api=https://webservices.bhosted.nl
-
 # BEGIN #########################TEMPORARY FUNCTIONS, USED FOR TESTING STANDALONE SCRIPT
 # BEGIN ######################### REMOVE WHEN USING WITH ACME.SH!!
 # BEGIN ##################
@@ -63,11 +61,13 @@ dns_bhnl_add() {
     fulldomain=$1
     txtvalue=$2
 
+    BHNL_Api=https://webservices.bhosted.nl
+
     _info "Start add DNS TXT record for $fulldomain with TXT value '$txtvalue'"
-    BHNL_Account="${BHNL_Account:-(_readaccountconf_mutable BHNL_Account)}"
-    BHNL_Password="${BHNL_Password:-(_readaccountconf_mutable BHNL_Password)}"
-    BHNL_sld="${BHNL_sld:-(_readaccountconf_mutable BHNL_sld)}"
-    BHNL_tld="${BHNL_tld:-(_readaccountconf_mutable BHNL_tld)}"
+    BHNL_Account="${BHNL_Account:-$(_readaccountconf_mutable BHNL_Account)}"
+    BHNL_Password="${BHNL_Password:-$(_readaccountconf_mutable BHNL_Password)}"
+    BHNL_sld="${BHNL_sld:-$(_readaccountconf_mutable BHNL_sld)}"
+    BHNL_tld="${BHNL_tld:-$(_readaccountconf_mutable BHNL_tld)}"
 
     if  [[ -z "$BHNL_sld" ]] || [[ -z "$BHNL_tld" ]] ; then
         # domain info incomplete (no toplevel and/or subdomain)
@@ -83,6 +83,9 @@ dns_bhnl_add() {
         _err "Incomplete domain login info."
         return 1
     fi
+
+    _info "Will be using account $BHNL_Account for domain '$BHNL_sld.$BHNL_tld.'"
+    _info "Will be using account $BHNL_Api url to access bHosted DNS API"
 
     # Save the info (which is possibly refreshed somehow...)
     _saveaccountconf_mutable BHNL_Account "$BHNL_Account"
@@ -137,11 +140,13 @@ dns_bhnl_rm() {
     fulldomain=$1
     txtvalue=$2
 
+    BHNL_Api=https://webservices.bhosted.nl
+
     _info "Start remove DNS TXT record for $fulldomain with value '$txtvalue'"
-    BHNL_Account="${BHNL_Account:-(_readaccountconf_mutable BHNL_Account)}"
-    BHNL_Password="${BHNL_Password:-(_readaccountconf_mutable BHNL_Password)}"
-    BHNL_sld="${BHNL_sld:-(_readaccountconf_mutable BHNL_sld)}"
-    BHNL_tld="${BHNL_tld:-(_readaccountconf_mutable BHNL_tld)}"
+    BHNL_Account="${BHNL_Account:-$(_readaccountconf_mutable BHNL_Account)}"
+    BHNL_Password="${BHNL_Password:-$(_readaccountconf_mutable BHNL_Password)}"
+    BHNL_sld="${BHNL_sld:-$(_readaccountconf_mutable BHNL_sld)}"
+    BHNL_tld="${BHNL_tld:-$(_readaccountconf_mutable BHNL_tld)}"
 
     if  [[ -z "$BHNL_sld" ]] || [[ -z "$BHNL_tld" ]] ; then
         # domain info incomplete (no toplevel and/or subdomain)
@@ -157,6 +162,9 @@ dns_bhnl_rm() {
         _err "Incomplete domain login info."
         return 1
     fi
+
+    _info "Will be using account $BHNL_Account for domain '$BHNL_sld.$BHNL_tld.'"
+    _info "Will be using account $BHNL_Api url to access bHosted DNS API"
 
     _debug "Detect root zone/split subdomain"
     if ! _get_root "$fulldomain" ; then

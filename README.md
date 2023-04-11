@@ -58,4 +58,4 @@ export SYNO_DID="myMFA-did"
 ./acme.sh -d "mydomain.com" --deploy --deploy-hook synology_dsm --home $PWD
 ```
 
-And that worked! I assigned the wildcard certificate the "default" attribute in DSM and allocated the certificate to all my websites. I also scheduled a "renew" action using the Synology DSM Task Scheduler to renew the certificate once a month (see https://lippertmarkus.com/2020/03/14/synology-le-dns-auto-renew/).
+And that worked! I assigned the wildcard certificate the "default" attribute in DSM and allocated the certificate to all my websites. I also scheduled a "renew" action using the Synology DSM Task Scheduler to renew the certificate once a month (see https://lippertmarkus.com/2020/03/14/synology-le-dns-auto-renew/). Note that you need to configure the scheduled task with a cd (change directory) to the folder where acme.sh is installed first, and then launch the acme.sh script with the necesary parameters.
